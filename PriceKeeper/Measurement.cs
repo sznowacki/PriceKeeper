@@ -6,7 +6,7 @@ using System.Text;
 
 namespace PriceKeeper
 {
-    class Measurement
+    public class Measurement
     {
         public int Id { get; set; }
         public int ProductId { get; set; }

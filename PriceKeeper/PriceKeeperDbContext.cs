@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace PriceKeeper
 {
-    class PriceKeeperDbContext : DbContext
+    public class PriceKeeperDbContext : DbContext
     {
         public DbSet<Product> Product { get; set; }
         public DbSet<Measurement> Measurement { get; set; }
