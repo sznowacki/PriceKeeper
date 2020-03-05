@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29806.167
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PriceKeeper", "PriceKeeper\PriceKeeper.csproj", "{23955F5D-15FD-4091-8FF1-67E83EC30CAE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PriceKeeperBL", "PriceKeeperBL\PriceKeeperBL.csproj", "{4EB75406-CE68-48FF-91D8-E8050C0A3F0C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{23955F5D-15FD-4091-8FF1-67E83EC30CAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{23955F5D-15FD-4091-8FF1-67E83EC30CAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{23955F5D-15FD-4091-8FF1-67E83EC30CAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{23955F5D-15FD-4091-8FF1-67E83EC30CAE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4EB75406-CE68-48FF-91D8-E8050C0A3F0C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4EB75406-CE68-48FF-91D8-E8050C0A3F0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4EB75406-CE68-48FF-91D8-E8050C0A3F0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4EB75406-CE68-48FF-91D8-E8050C0A3F0C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {37C8CE28-9A5F-4BB9-856F-54B2E6D76069}
+	EndGlobalSection
+EndGlobal
