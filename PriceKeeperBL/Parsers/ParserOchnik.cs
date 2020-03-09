@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Net;
-using System.Text;
 using HtmlAgilityPack;
 using PriceKeeper;
 
@@ -12,18 +9,23 @@ namespace PriceKeeperBL.Parsers
     {
         public Measurement ParseSource(Product product)
         {
-            Measurement measurement = new Measurement();
-            using (WebClient client = new WebClient())
+            try
             {
-                var doc = new HtmlWeb()
-                    .Load(product.Link);
+                Measurement measurement = new Measurement();
+                HtmlDocument document = new HtmlDocument();
+                Page page = new Page();
 
-                var measurementData = doc.DocumentNode.SelectNodes("//div[contains(@class, 'product__data js--datalayer')]")[0];
+                var site = page.GetPageAsStringAsync(product.Link).Result;
+                document.LoadHtml(site);
 
-                measurement.Price = float.Parse(measurementData.ChildNodes["input"].Attributes[2].Value, CultureInfo.InvariantCulture);
+                var price = document.DocumentNode
+                    .SelectNodes("//div[contains(@class, 'product__data js--datalayer')]")[0]
+                    .ChildNodes["input"]
+                    .Attributes[2]
+                    .Value;
 
-                var sizeNodes = doc.DocumentNode.SelectNodes(
-                    "//select[contains(@class, 'js--outpost-popup__size outpost-popup__size')]");
+                var sizeNodes = document.DocumentNode
+                    .SelectNodes("//select[contains(@class, 'js--outpost-popup__size outpost-popup__size')]");
 
                 foreach (var sizeNode in sizeNodes)
                 {
@@ -33,16 +35,21 @@ namespace PriceKeeperBL.Parsers
                             || childNode.InnerHtml.Trim().Contains("L")
                             && !childNode.InnerHtml.Trim().Contains("XL"))
                         {
-                            string size = childNode.InnerHtml.Replace("\t", "").Replace("\n", "");
+                            var size = childNode.InnerHtml.Replace("\t", "").Replace("\n", "");
                             measurement.Available = !size.Contains("wyprzedany");
                         }
                     }
                 }
 
+                measurement.Price = Convert.ToDouble(price, CultureInfo.InvariantCulture);
                 measurement.Date = DateTimeOffset.Now;
                 measurement.ProductId = product.Id;
 
                 return measurement;
+            }
+            catch (Exception)
+            {
+                return null;
             }
         }
     }

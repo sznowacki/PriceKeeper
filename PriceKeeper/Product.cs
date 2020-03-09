@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
-
-namespace PriceKeeper
+﻿namespace PriceKeeper
 {
     public class Product
     {
@@ -14,13 +9,13 @@ namespace PriceKeeper
         public string Size { get; set; }
         public string Link { get; set; }
 
-        public Product(string Name, string Category, double Threshold, string Size, string Link)
+        public Product(string name, string category, double threshold, string size, string link)
         {
-            this.Name = Name;
-            this.Category = Category;
-            this.Threshold = Threshold;
-            this.Size = Size;
-            this.Link = Link;
+            Name = name;
+            Category = category;
+            Threshold = threshold;
+            Size = size;
+            Link = link;
         }
     }
 }

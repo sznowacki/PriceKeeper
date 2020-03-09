@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using PriceKeeper;
 using PriceKeeperBL.Parsers;
@@ -15,95 +14,43 @@ namespace PriceKeeperBL
 
             AddMeasurementsToDatabase(measurements);
         }
-
+        
         private static void AddMeasurementsToDatabase(List<Measurement> measurements)
         {
             foreach (Measurement measurement in measurements)
             {
-                using (var dataContext = new PriceKeeperDbContext())
-                {
-                    dataContext.Measurement.Add(measurement);
-                    dataContext.SaveChanges();
-                }
+                using var dataContext = new PriceKeeperDbContext();
+                dataContext.Measurement.Add(measurement);
+                dataContext.SaveChanges();
             }
         }
 
         private static List<Measurement> GetMeasurementsForProducts(List<Product> products)
         {
-            IParser parser = null;
-            List<Measurement> measurements = new List<Measurement>();
-
-            foreach (Product product in products)
-            {
-                parser = GetParser(product, parser);
-
-                DoMeasurement(parser, product, measurements);
-            }
-
-            return measurements;
+            return products
+                .Select(GetMeasurement)
+                .Where(x => x != null)
+                .ToList();
         }
 
-        private static void DoMeasurement(IParser parser, Product product, List<Measurement> measurements)
+        private static Measurement GetMeasurement(Product product)
         {
-            try
-            {
-                Measurement measurement = parser.ParseSource(product);
-                measurements.Add(measurement);
-            }
-            catch (Exception exception)
-            {
-                Console.WriteLine($"{product.Name}: {exception.Message}");
-            }
+            ParserFactory factory = new ParserFactory();
+            var parser = factory.CreateParser(product.Link);
+            return parser.ParseSource(product);
         }
-
-        private static IParser GetParser(Product product, IParser parser)
-        {
-            if (product.Link.Contains("empik"))
-                parser = new ParserEmpik();
-
-            else if (product.Link.Contains("ochnik"))
-                parser = new ParserOchnik();
-
-            else if (product.Link.Contains("coffeedesk"))
-                parser = new ParserCoffeeDesk();
-
-            else if (product.Link.Contains("x-kom"))
-                parser = new ParserXkom();
-
-            return parser;
-        }
-
+        
         private void AddProductToDatabase(Product product)
         {
-            using (var dataContext = new PriceKeeperDbContext())
-            {
-                try
-                {
-                    dataContext.Product.Add(product);
-                    dataContext.SaveChanges();
-                }
-                catch (Exception exception)
-                {
-                    Console.WriteLine($"{product.Name}: {exception.Message}");
-                }
-            }
+            using var dataContext = new PriceKeeperDbContext();
+            dataContext.Product.Add(product);
+            dataContext.SaveChanges();
         }
         
         private static List<Product> RetrieveProductsListFromDatabase()
         {
-            using (var context = new PriceKeeperDbContext())
-            {
-
-            }
-            var _context = new PriceKeeperDbContext();
-            var productsContext = _context.Product.ToList();
-            List<Product> products = new List<Product>();
-            foreach (Product product in productsContext)
-            {
-                products.Add(product);
-            }
-
-            return products;
+            using var context = new PriceKeeperDbContext();
+            return context.Product.ToList();
         }
     }
 }

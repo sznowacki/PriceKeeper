@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Net.Http.Headers;
-using System.Text;
 using HtmlAgilityPack;
 using PriceKeeper;
 
@@ -12,28 +8,35 @@ namespace PriceKeeperBL.Parsers
     {
         public Measurement ParseSource(Product product)
         {
-            Measurement measurement = new Measurement();
-            
-            using (WebClient client = new WebClient())
+            try
             {
-                var doc = new HtmlWeb()
-                    .Load(product.Link);
+                Measurement measurement = new Measurement();
+                HtmlDocument document = new HtmlDocument();
+                Page page = new Page();
 
-                measurement.Price = Convert.ToSingle(doc.DocumentNode
+                var site = page.GetPageAsStringAsync(product.Link).Result;
+                document.LoadHtml(site);
+
+                var price = document.DocumentNode
                     .SelectNodes("//div[contains(@class, 'productPriceInfo__wrapper')]")[0]
                     .InnerText
                     .Split("&")[0]
-                    .Replace("\n", ""));
+                    .Replace("\n", "");
 
-                measurement.Available = !(doc.DocumentNode
+                measurement.Available = !(document.DocumentNode
                     .SelectNodes("//div[contains(@class, 'productPriceInfo__shipment')]")[0]
                     .InnerText
                     .Contains("Niedostępne"));
 
+                measurement.Price = Convert.ToDouble(price);
                 measurement.Date = DateTimeOffset.Now;
                 measurement.ProductId = product.Id;
 
                 return measurement;
+            }
+            catch (Exception)
+            {
+                return null;
             }
         }
     }
