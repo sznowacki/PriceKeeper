@@ -21,6 +21,9 @@ namespace PriceKeeperBL.Parsers
             if (link.Contains("x-kom"))
                 return new ParserXkom();
 
+            if (link.Contains("steam"))
+                return new ParserSteam();
+
             throw new Exception("Parser not-available");
         }
     }

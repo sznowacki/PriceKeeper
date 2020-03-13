@@ -37,11 +37,11 @@ namespace PriceKeeperBL
             {
                 List<Product> products = RetrieveProductsListFromDatabase();
                 List<Measurement> measurements = GetMeasurementsForProducts(products);
-                
+
                 Newsletter newsletter = new Newsletter();
                 var message = newsletter.CreateMessage(products,measurements);
                 newsletter.SaveMessage(message);
-
+                
                 AddMeasurementsToDatabase(measurements);
             }
         }
