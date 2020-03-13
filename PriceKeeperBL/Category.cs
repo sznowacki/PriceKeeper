@@ -8,6 +8,7 @@ namespace PriceKeeperBL
     {
         Electronics,
         Clothes,
-        Coffee
+        Coffee,
+        Books
     }
 }
